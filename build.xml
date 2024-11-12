@@ -1,0 +1,55 @@
+<project name="DockerAntProject" default="docker-build" basedir=".">
+    <!-- Define properties -->
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="docker.image.name" value="docker-ant-app"/>
+    
+    <!-- Create build directories -->
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${classes.dir}"/>
+    </target>
+    
+    <!-- Compile the source code -->
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false">
+        </javac>
+    </target>
+    
+    <!-- Create JAR file -->
+    <target name="jar" depends="compile">
+        <jar destfile="${build.dir}/app.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="com.example.App"/>
+            </manifest>
+        </jar>
+    </target>
+    
+    <!-- Build Docker image -->
+    <target name="docker-build" depends="jar">
+        <echo message="Building Docker image..."/>
+        <exec executable="docker">
+            <arg value="build"/>
+            <arg value="-t"/>
+            <arg value="${docker.image.name}"/>
+            <arg value="."/>
+        </exec>
+    </target>
+    
+    <!-- Run Docker container -->
+    <target name="docker-run" depends="docker-build">
+        <echo message="Running Docker container..."/>
+        <exec executable="docker">
+            <arg value="run"/>
+            <arg value="--rm"/>
+            <arg value="${docker.image.name}"/>
+        </exec>
+    </target>
+    
+    <!-- Clean build directories -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+</project>
