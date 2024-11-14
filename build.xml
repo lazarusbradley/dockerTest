@@ -2,12 +2,19 @@
     <property file="database.properties"/>
 
     <target name="build">
-        <exec executable="docker" output="true">
+        <!-- Docker Build -->
+        <echo message="Building Docker image..."/>
+        <exec executable="docker" failonerror="true">
             <arg value="build"/>
             <arg value="-t"/>
             <arg value="postgres-liquibase"/>
+            <redirector output="docker_build.log" error="docker_build_error.log"/>
         </exec>
-        <exec executable="docker" output="true">
+        <echo message="Docker image build complete. See docker_build.log and docker_build_error.log for details."/>
+
+        <!-- Docker Run -->
+        <echo message="Running Docker container..."/>
+        <exec executable="docker" failonerror="true">
             <arg value="run"/>
             <arg value="-d"/>
             <arg value="--name"/>
@@ -19,6 +26,8 @@
             <arg value="-e"/>
             <arg value="POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"/>
             <arg value="postgres-liquibase"/>
+            <redirector output="docker_run.log" error="docker_run_error.log"/>
         </exec>
+        <echo message="Docker container is running. See docker_run.log and docker_run_error.log for details."/>
     </target>
 </project>
