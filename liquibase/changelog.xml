@@ -1,35 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
-
     <changeSet id="1" author="yourname">
-        <createTable tableName="gps_tracker">
+        <createTable tableName="example_table">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="date" type="date"/>
-            <column name="time" type="time"/>
-            <column name="geoCoords" type="varchar(255)"/>
+            <column name="name" type="varchar(255)"/>
         </createTable>
     </changeSet>
 
+    <!-- Sample Data -->
     <changeSet id="2" author="yourname">
-        <insert tableName="gps_tracker">
-            <column name="date" value="2024-11-14"/>
-            <column name="time" value="08:45:00"/>
-            <column name="geoCoords" value="40.712776, -74.005974"/>
+        <insert tableName="example_table">
+            <column name="name" value="Sample Name 1"/>
         </insert>
-        <insert tableName="gps_tracker">
-            <column name="date" value="2024-11-14"/>
-            <column name="time" value="09:00:00"/>
-            <column name="geoCoords" value="34.052235, -118.243683"/>
+        <insert tableName="example_table">
+            <column name="name" value="Sample Name 2"/>
         </insert>
-        <insert tableName="gps_tracker">
-            <column name="date" value="2024-11-14"/>
-            <column name="time" value="09:15:00"/>
-            <column name="geoCoords" value="51.507351, -0.127758"/>
+        <insert tableName="example_table">
+            <column name="name" value="Sample Name 3"/>
         </insert>
     </changeSet>
-
 </databaseChangeLog>

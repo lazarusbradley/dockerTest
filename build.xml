@@ -1,18 +1,16 @@
-<project name="PostgresLiquibase" default="build" basedir=".">
-    <property file="database.properties"/>
-
+<project name="PostgresLiquibase" default="deploy" basedir=".">
     <target name="build">
-        <!-- Docker Build -->
         <echo message="Building Docker image..."/>
         <exec executable="docker" failonerror="true">
             <arg value="build"/>
+            <arg value="--no-cache"/>
             <arg value="-t"/>
             <arg value="postgres-liquibase"/>
-            <redirector output="docker_build.log" error="docker_build_error.log"/>
+            <arg value="."/>
         </exec>
-        <echo message="Docker image build complete. See docker_build.log and docker_build_error.log for details."/>
+    </target>
 
-        <!-- Docker Run -->
+    <target name="run" depends="build">
         <echo message="Running Docker container..."/>
         <exec executable="docker" failonerror="true">
             <arg value="run"/>
@@ -20,14 +18,16 @@
             <arg value="--name"/>
             <arg value="postgres-liquibase-container"/>
             <arg value="-e"/>
-            <arg value="POSTGRES_DB=${POSTGRES_DB}"/>
+            <arg value="POSTGRES_DB=test_db"/>
             <arg value="-e"/>
-            <arg value="POSTGRES_USER=${POSTGRES_USER}"/>
+            <arg value="POSTGRES_USER=username"/>
             <arg value="-e"/>
-            <arg value="POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"/>
+            <arg value="POSTGRES_PASSWORD=password"/>
             <arg value="postgres-liquibase"/>
-            <redirector output="docker_run.log" error="docker_run_error.log"/>
         </exec>
-        <echo message="Docker container is running. See docker_run.log and docker_run_error.log for details."/>
+    </target>
+
+    <target name="deploy" depends="run">
+        <echo message="Deployment completed successfully!"/>
     </target>
 </project>
