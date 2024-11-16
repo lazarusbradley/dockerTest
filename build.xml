@@ -1,31 +1,49 @@
-<project name="PostgresDeployment" default="deploy" basedir=".">
+<project name="DockerCompose" default="deploy" basedir=".">
+<!-- To connect to DB... first run "ant", then "ant connect"-->
+    <property name="docker.compose.file" value="docker-compose.yml"/>
+    <property name="docker.compose" value="docker-compose"/>
 
-    <target name="build">
-        <echo message="Building Docker image..."/>
-        <exec executable="docker" failonerror="true">
-            <arg value="build"/>
-            <arg value="--no-cache"/>
-            <arg value="-t"/>
-            <arg value="postgres-basic"/>
-            <arg value="."/>
-        </exec>
-    </target>
-
-    <target name="run" depends="build">
-        <echo message="Running Docker container..."/>
-        <exec executable="docker" failonerror="true">
-            <arg value="run"/>
+    <target name="up">
+        <echo message="Starting Docker Compose..."/>
+        <exec executable="${docker.compose}" failonerror="true">
+            <arg value="-f"/>
+            <arg value="${docker.compose.file}"/>
+            <arg value="up"/>
             <arg value="-d"/>
-            <arg value="--name"/>
-            <arg value="postgres-basic-container"/>
-            <arg value="-p"/>
-            <arg value="5432:5432"/>
-            <arg value="postgres-basic"/>
         </exec>
     </target>
 
-    <target name="deploy" depends="run">
-        <echo message="PostgreSQL deployment completed successfully!"/>
+    <target name="down">
+        <echo message="Stopping Docker Compose..."/>
+        <exec executable="${docker.compose}" failonerror="true">
+            <arg value="-f"/>
+            <arg value="${docker.compose.file}"/>
+            <arg value="down"/>
+        </exec>
     </target>
 
+    <target name="deploy" depends="up">
+        <echo message="Docker Compose deployment completed successfully!"/>
+    </target>
+
+    <target name="stop" depends="down">
+        <echo message="Docker Compose services stopped successfully!"/>
+    </target>
+	
+    <property name="db.host" value="localhost"/>
+    <property name="db.port" value="5432"/>
+    <property name="db.user" value="postgres"/>
+    <property name="db.password" value="password"/>
+    <property name="db.name" value="postgres"/>
+    <target name="connect">
+        <echo message="Opening new terminal window and connecting to PostgreSQL database..."/>
+        <exec executable="cmd" failonerror="true">
+            <arg value="/c"/>
+            <arg value="start"/>
+            <arg value="cmd"/>
+            <arg value="/k"/>
+            <arg value="psql -h localhost -p 5432 -U postgres"/>
+            <env key="PGPASSWORD" value="${db.password}"/>
+        </exec>
+    </target>
 </project>
