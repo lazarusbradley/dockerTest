@@ -1,10 +1,13 @@
-version: '3'
 services:
   db:
-    image: postgres:latest  # Use a pre-built image
+    image: postgres:latest
     environment:
-      POSTGRES_DB: test_db #credentials are NOT working. just do postgres:password for login... FIX LATER.
+      POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+volumes:
+  db-data:

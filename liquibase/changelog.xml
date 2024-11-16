@@ -3,25 +3,32 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
-    <changeSet id="1" author="yourname">
-        <createTable tableName="example_table">
+
+    <!-- ChangeSet for creating the employees table -->
+    <changeSet id="1" author="liquibase">
+        <createTable tableName="employees">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(255)"/>
+            <column name="fullname" type="varchar(100)"/>
+            <column name="title" type="varchar(50)"/>
         </createTable>
     </changeSet>
 
-    <!-- Sample Data -->
-    <changeSet id="2" author="yourname">
-        <insert tableName="example_table">
-            <column name="name" value="Sample Name 1"/>
+    <!-- ChangeSet for inserting sample rows into employees table -->
+    <changeSet id="2" author="liquibase">
+        <insert tableName="employees">
+            <column name="fullname" value="John Doe"/>
+            <column name="title" value="Manager"/>
         </insert>
-        <insert tableName="example_table">
-            <column name="name" value="Sample Name 2"/>
+        <insert tableName="employees">
+            <column name="fullname" value="Jane Smith"/>
+            <column name="title" value="Developer"/>
         </insert>
-        <insert tableName="example_table">
-            <column name="name" value="Sample Name 3"/>
+        <insert tableName="employees">
+            <column name="fullname" value="Emily Johnson"/>
+            <column name="title" value="Analyst"/>
         </insert>
     </changeSet>
+
 </databaseChangeLog>

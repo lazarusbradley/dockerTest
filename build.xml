@@ -1,7 +1,8 @@
 <project name="DockerCompose" default="deploy" basedir=".">
-<!-- To connect to DB... first run "ant", then "ant connect"-->
+    <!-- First run "ant deploy", then "ant connect"-->
     <property name="docker.compose.file" value="docker-compose.yml"/>
     <property name="docker.compose" value="docker-compose"/>
+    <property name="liquibase.home" value="C:\Program Files\liquibase"/>
 
     <target name="up">
         <echo message="Starting Docker Compose..."/>
@@ -22,19 +23,27 @@
         </exec>
     </target>
 
+    <target name="liquibase" depends="up">
+        <echo message="Applying Liquibase changes..."/>
+        <exec executable="${liquibase.home}/liquibase.bat" failonerror="true">
+            <arg value="update"/>
+        </exec>
+    </target>
+
     <target name="deploy" depends="up">
-        <echo message="Docker Compose deployment completed successfully!"/>
+        <echo message="Docker Compose deployment and Liquibase changes applied successfully!"/>
     </target>
 
     <target name="stop" depends="down">
         <echo message="Docker Compose services stopped successfully!"/>
     </target>
-	
+
     <property name="db.host" value="localhost"/>
     <property name="db.port" value="5432"/>
     <property name="db.user" value="postgres"/>
     <property name="db.password" value="password"/>
     <property name="db.name" value="postgres"/>
+    
     <target name="connect">
         <echo message="Opening new terminal window and connecting to PostgreSQL database..."/>
         <exec executable="cmd" failonerror="true">
