@@ -1,11 +1,12 @@
-<project name="PostgresLiquibase" default="deploy" basedir=".">
+<project name="PostgresDeployment" default="deploy" basedir=".">
+
     <target name="build">
         <echo message="Building Docker image..."/>
         <exec executable="docker" failonerror="true">
             <arg value="build"/>
             <arg value="--no-cache"/>
             <arg value="-t"/>
-            <arg value="postgres-liquibase"/>
+            <arg value="postgres-basic"/>
             <arg value="."/>
         </exec>
     </target>
@@ -16,18 +17,15 @@
             <arg value="run"/>
             <arg value="-d"/>
             <arg value="--name"/>
-            <arg value="postgres-liquibase-container"/>
-            <arg value="-e"/>
-            <arg value="POSTGRES_DB=test_db"/>
-            <arg value="-e"/>
-            <arg value="POSTGRES_USER=username"/>
-            <arg value="-e"/>
-            <arg value="POSTGRES_PASSWORD=password"/>
-            <arg value="postgres-liquibase"/>
+            <arg value="postgres-basic-container"/>
+            <arg value="-p"/>
+            <arg value="5432:5432"/>
+            <arg value="postgres-basic"/>
         </exec>
     </target>
 
     <target name="deploy" depends="run">
-        <echo message="Deployment completed successfully!"/>
+        <echo message="PostgreSQL deployment completed successfully!"/>
     </target>
+
 </project>
